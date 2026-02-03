@@ -1,0 +1,3 @@
+enum OrderStatus {
+    CREATED, CANCELLED;
+}
