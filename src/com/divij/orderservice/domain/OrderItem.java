@@ -1,3 +1,5 @@
+package com.divij.orderservice.domain;
+
 public class OrderItem {
     private final String productId;
     private final int qty;
@@ -6,7 +8,7 @@ public class OrderItem {
 
     public OrderItem(String productId, int qty, double unitPrice) {
         if(productId == null || productId.isBlank()){
-            throw new IllegalArgumentException("Product Id cannot be null or blank");
+            throw new IllegalArgumentException("com.divij.orderservice.domain.Product Id cannot be null or blank");
         }
         if(qty <= 0){
             throw new IllegalArgumentException("Quantity cannot be less than 0");

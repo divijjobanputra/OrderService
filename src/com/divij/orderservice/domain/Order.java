@@ -1,3 +1,5 @@
+package com.divij.orderservice.domain;
+
 import java.util.List;
 
 public class Order {
@@ -8,10 +10,10 @@ public class Order {
 
     public Order(String orderId, List<OrderItem> items) {
         if(orderId == null || orderId.isBlank()){
-            throw new IllegalArgumentException("Order id cannot be null or blank");
+            throw new IllegalArgumentException("com.divij.orderservice.domain.Order id cannot be null or blank");
         }
         if(items == null || items.isEmpty() || items.contains(null)){
-            throw new IllegalArgumentException("Order items cannot be null or empty");
+            throw new IllegalArgumentException("com.divij.orderservice.domain.Order items cannot be null or empty");
         }
         this.orderId = orderId;
         this.items = List.copyOf(items);
@@ -25,7 +27,7 @@ public class Order {
 
     public void cancel(){
         if(status==OrderStatus.CANCELLED){
-            throw new IllegalStateException("Order already cancelled");
+            throw new IllegalStateException("com.divij.orderservice.domain.Order already cancelled");
         }
         else {
             status = OrderStatus.CANCELLED;

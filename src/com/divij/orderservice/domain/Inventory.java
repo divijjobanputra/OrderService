@@ -1,3 +1,5 @@
+package com.divij.orderservice.domain;
+
 public class Inventory {
 
     private final String productId;
