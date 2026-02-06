@@ -7,17 +7,25 @@ public class CreateOrderCommand {
     private final List<CreateOrderItem> items;
 
     public CreateOrderCommand(String orderId, List<CreateOrderItem> items) {
-        if(orderId == "null" || orderId.isBlank()) {
+        if (orderId == null || orderId.isBlank()) {
             throw new IllegalArgumentException("Order ID cannot be null or blank");
         }
-        if(items.isEmpty() || items.contains(null) || items == null) {
-            throw new IllegalArgumentException("Items cannot be null");
+
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("Items cannot be null or empty");
+        }
+
+        // manual null check instead of contains(null)
+        for (CreateOrderItem item : items) {
+            if (item == null) {
+                throw new IllegalArgumentException("Order item cannot be null");
+            }
         }
         this.orderId = orderId;
         this.items = List.copyOf(items);
     }
 
-    public String getOrderId() {
+    public String getOrderId(){
         return orderId;
     }
 

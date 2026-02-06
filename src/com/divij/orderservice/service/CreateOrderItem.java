@@ -6,10 +6,10 @@ public class CreateOrderItem {
 
     public CreateOrderItem(String productId, int qty) {
         if(productId == null || productId.isBlank() || productId.trim().length() == 0) {
-            throw new IllegalArgumentException("com.divij.orderservice.service. Product id is invalid");
+            throw new IllegalArgumentException("Product id is invalid");
         }
         if(qty<=0){
-            throw new IllegalArgumentException("com.divij.orderservice.service. qty is invalid");
+            throw new IllegalArgumentException("qty is invalid");
         }
         this.productId = productId;
         this.qty = qty;

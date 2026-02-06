@@ -21,7 +21,7 @@ public class Inventory {
     //order placed
     public void reserve(int qty) {
         if (qty <= 0 || qty > availableQty) {
-            throw new IllegalArgumentException("qty must be greater than 0 or qty must be less than or equal to availableQty");
+            throw new IllegalArgumentException("qty must be > 0 AND <= availableQty");
         }
         availableQty -= qty;
         reservedQty += qty;
