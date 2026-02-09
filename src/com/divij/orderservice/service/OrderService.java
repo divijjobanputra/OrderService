@@ -4,7 +4,6 @@ import com.divij.orderservice.domain.Order;
 import com.divij.orderservice.domain.OrderItem;
 import com.divij.orderservice.domain.Product;
 import com.divij.orderservice.repo.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +76,50 @@ public class OrderService {
             this.qty = qty;
         }
     }
+
+    public Order cancelOrder(String orderId) {
+        if (orderId == null || orderId.isBlank()) {
+            throw new IllegalArgumentException("Order id cannot be null/blank");
+        }
+
+        Order order = orderRepo.getById(orderId);
+
+        // Track what we've successfully released so far (for rollback if something fails mid-way)
+        List<Reservation> releasedSoFar = new ArrayList<>();
+
+        try {
+            for (OrderItem item : order.getItems()) {
+                String productId = item.getProductId();
+                int qty = item.getQty();
+
+                Inventory inv = inventoryRepo.getByProductId(productId);
+
+                // reverse of reserve(): move reserved -> available
+                inv.release(qty);
+
+                // record only AFTER release succeeds (so rollback is correct)
+                releasedSoFar.add(new Reservation(inv, qty));
+            }
+
+            // Only mark order cancelled AFTER inventory changes succeeded
+            order.cancel();
+
+            // Save updated order state
+            orderRepo.save(order);
+
+            return order;
+
+        } catch (RuntimeException e) {
+            // rollback cancel: undo releases by re-reserving what we released
+            for (int i = releasedSoFar.size() - 1; i >= 0; i--) {
+                Reservation r = releasedSoFar.get(i);
+                try {
+                    r.inventory.reserve(r.qty);
+                } catch (RuntimeException ignored) {
+                    // best-effort rollback; don't hide original error
+                }
+            }
+            throw e;
+        }
+    }
 }
-
-
